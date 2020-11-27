@@ -1,5 +1,4 @@
 const router = require('koa-router')();
-const homeController = require('../controller/home');
 
 const uuid = require("uuid");
 const Path = require("path");
@@ -12,8 +11,12 @@ const uploader = busboy({
 });
 
 module.exports = (app) => {
-    console.log("app ======>in router=====>",app);
-    router.get('/',app.$controller.home.index);
+    const controller = app.$controller;
+    console.log("controller==========>ok",controller);
+    console.log("service==========>ok",app.$service);
+    console.log("model==========>ok",app.$model);
+
+    router.get('/',controller.home.index);
 
     app.use(router.routes())
         .use(router.allowedMethods());

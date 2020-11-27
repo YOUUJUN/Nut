@@ -10,12 +10,10 @@ const history = require('koa2-history-api-fallback');
 const session = require('koa-session');
 const jwt = require("jsonwebtoken");
 const TOKENSECRET = require("./config/tokensecret");
-const initializer = require("./middlewares/init");
-const loader = require("./middlewares/loader");
+const engine = require("./core/engine");
 
 
-initializer(app);
-// app.use(loader);
+engine.start(app);
 
 
 /*---登录状态检测中间件---*/

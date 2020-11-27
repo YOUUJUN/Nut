@@ -1,3 +1,7 @@
 module.exports = {
-    ok : "ok"
+    ok : "ok",
+
+    sayWell (){
+        console.log("well");
+    }
 }

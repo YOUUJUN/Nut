@@ -8,5 +8,7 @@ module.exports = {
         // console.log("well");
     },
 
-    hi : "hi"
+    hi : "hi",
+
+    hi2 : "hi",
 };

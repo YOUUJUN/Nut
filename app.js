@@ -5,15 +5,20 @@ const json = require('koa-json');
 const onerror = require('koa-onerror');
 const bodyparser = require('koa-bodyparser');
 const logger = require('koa-logger');
-const router = require('./middlewares/router');
+const router = require('./app/middleware/router');
 const history = require('koa2-history-api-fallback');
 const session = require('koa-session');
 const jwt = require("jsonwebtoken");
 const TOKENSECRET = require("./config/tokensecret");
-const engine = require("./core/engine");
+// const engine = require("./nut-core/engine");
+
+// engine.start(app);
+
+const Nut = require('./nut-core/start');
+
+let nut = new Nut();
 
 
-engine.start(app);
 
 
 /*---登录状态检测中间件---*/
@@ -40,8 +45,9 @@ app.use(bodyparser({
 app.use(json());
 app.use(logger());
 
+let allowOriginURL = (process.env.NODE_ENV !== 'production') ? "http://localhost:8081" : "";
 app.use( async (ctx, next) =>{
-  ctx.set("Access-Control-Allow-Origin","http://localhost:8080");
+  ctx.set("Access-Control-Allow-Origin",allowOriginURL);
 
   ctx.set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, accesstoken");
 
@@ -50,11 +56,11 @@ app.use( async (ctx, next) =>{
 });
 
 
-router(app);
-
 // app.use(require('koa-static')(__dirname + '/database/expose'));
 app.use(require('koa-static')(__dirname + '/views'));
 app.use(require('koa-static')(__dirname + '/vue-public'));
+
+router(app); //koa-router 应在koa-static下面注册，否则koa-router会根据静态路径多次match,影响性能
 
 //添加ejs模板并修改模板后缀为html
 // app.use(views(__dirname + '/vue-dist', {

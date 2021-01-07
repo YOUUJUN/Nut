@@ -136,7 +136,7 @@ module.exports = function(){
         filenameHashing : false,
         pages : buildPageSync(),
         devServer : {
-            port : 8081,
+            port : 8080,
             hot : true,
             open: false //是否自动打开浏览器
         },
@@ -160,17 +160,6 @@ module.exports = function(){
                 })
             ],
 
-            // externals :{
-            //     'vue': 'Vue',
-            //     'vue-router': 'VueRouter',
-            //     'vuex': 'Vuex',
-            //     'axios': 'axios',
-            //     'element-ui': 'ELEMENT',
-            //     'jquery' : 'window.jQuery',
-            //     'echarts' : 'echarts',
-            //     "wow" : 'WOW',
-            // },
-
             externals : externalModules
 
         },
@@ -180,7 +169,7 @@ module.exports = function(){
             //     .plugin('webpack-bundle-analyzer')
             //     .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin);
 
-            const entry = Object.keys(buildPageSync())
+            const entry = Object.keys(buildPageSync());
             for (const iterator of entry) {
                 config
                     .plugin(`html-${iterator}`)

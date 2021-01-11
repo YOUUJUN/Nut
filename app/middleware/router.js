@@ -11,12 +11,10 @@ const uploader = busboy({
 });
 
 module.exports = (app) => {
-    const controller = app.$controller;
-    console.log("controller==========>ok1",app);
-    console.log("service==========>ok",app.$service);
-    console.log("model==========>ok",app.$model);
-
-    // router.get('/',controller.home.index);
+    console.log("app",app);
+    const {controller} = app;
+    // console.log('controller',controller.home.index());
+    router.get('/ok',controller.home.index);
 
     app.use(router.routes())
         .use(router.allowedMethods());

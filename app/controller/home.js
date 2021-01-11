@@ -1,14 +1,15 @@
-module.exports = {
-    index (ctx, next) {
+const Controller = require('../../nut/').Controller;
+console.log("Controller======>",typeof Controller);
+class HomeController extends Controller{
 
-        console.log("service=====>",ctx.app.$service.home.said);
+    async index (ctx, next){
+        console.log("say hi from homeJS",ctx, next);
+    }
 
-        ctx.body = "stupid";
-        // next();
-        // console.log("well");
-    },
+    async index2 (){
+        console.log("say hi from homeJS2");
 
-    hi : "hi",
+    }
+}
 
-    hi2 : "hi",
-};
+module.exports = HomeController;

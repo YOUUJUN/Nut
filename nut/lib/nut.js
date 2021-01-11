@@ -1,6 +1,6 @@
-const NutCore = require('./nut');
+const NutCore = require('../../nut-core').NutCore;
 
-console.log("NutCore===>", typeof NutCore);
+console.log("NutCore===>",NutCore);
 
 class Nut extends NutCore{
 
@@ -15,6 +15,8 @@ class Nut extends NutCore{
         this.loader.loadController();
     }
 }
+
+console.log("Nut",Nut);
 
 module.exports = Nut;
 

@@ -85,7 +85,7 @@ let externalConfig = [
     {name : 'vue-router', scope: 'VueRouter', js: 'vue-router.min.js'},
     {name : 'vuex', scope: 'Vuex', js: 'vuex.min.js'},
     {name: 'axios', scope: 'axios', js: 'axios.min.js'},
-    {name: 'element-ui', scope: 'ELEMENT', js: 'index.js', css: 'theme-chalk/index.css'},
+    {name: 'element-ui', scope: 'ELEMENT', js: 'start.js.js', css: 'theme-chalk/index.css'},
     {name: 'jquery', scope: 'window.jQuery', js: 'jquery.js'},
     {name: 'echarts', scope: 'echarts', js: 'echarts.min.js'},
 ];

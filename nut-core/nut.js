@@ -4,7 +4,6 @@ const ContextClass = require('./utils/context_class');
 
 const NUT_LOADER = Symbol.for('NUT_LOADER');
 
-console.log("KoaApplication====>",typeof KoaApplication);
 class NutCore extends KoaApplication{
 
     constructor (options = {}){

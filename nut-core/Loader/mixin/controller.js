@@ -11,8 +11,9 @@ module.exports = {
             directory : Path.join(this.options.baseDir, 'app/controller'),
             initializer : (obj, options) => {
 
-                console.log("path from controller ====>",options.path);
+                console.log("path from controller ====>",utils.isClass(obj));
                 if(utils.isClass(obj)){
+                    console.log('did we actually in already ????');
                     obj.prototype.pathName = options.pathName;
                     obj.prototype.fullPath = options.path;
                     return wrapClass(obj);
@@ -54,7 +55,7 @@ function wrapClass(Controller) {
 
     function methodToMiddleware(Controller, key) {
 
-        return function classControllerMiddleware(...arg) {
+        return function classControllerMiddleware(...args) {
             const controller = new Controller(this);
 
             return callFn(controller[key], args, controller);

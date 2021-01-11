@@ -31,7 +31,6 @@ class FileLoader {
             let obj = {};
             item.properties.reduce((cursor, property, index, arr)=>{
                 const properties = item.properties.slice(0, index + 1).join('.');
-                console.log("properties from file_loader.js===>",properties);
 
                 if(index === item.properties.length - 1){
                     obj = item.exports;
@@ -75,10 +74,10 @@ class FileLoader {
                 let properties = defaultCamelize(filePath,"camel");
 
                 const pathName = directory.split(/[/\\]/).slice(-1) + '.' + properties.join('.');
-                console.log("pathName from file_loader.js===>",pathName);
 
-                console.log("args goes to exports===>", fullPath, this.options, pathName);
                 let exports = getExports(fullPath, this.options, pathName);
+
+                console.log('so what is the exports anyway',exports);
 
                 // let name = Path.basename(filePath,".js");
 
@@ -100,23 +99,30 @@ module.exports.EXPORTS = EXPORTS;
 module.exports.FULLPATH = FULLPATH;
 
 function getExports(fullPath, {initializer, inject}, pathName) {
+    console.log('into the  getExports ---------------->');
     let exports = utils.loadFile(fullPath);
-
+    console.log('well-----------------------ok--0',fullPath, exports);
     if(initializer){
         exports = initializer(exports, {path : fullPath, pathName});
+        console.log('well-----------------------ok', typeof exports);
     }
 
     if (utils.isClass(exports) || utils.isGeneratorFunction(exports) || utils.isAsyncFunction(exports)) {   //这个判断永远不会执行...
-        console.log("from  isClass judge=============>");
+        console.log("---------------------------------well this is wild------------------------------------");
         return exports;
     }
 
     if(utils.isFunction(exports)){
         exports = exports(inject);
+        console.log("exports---->",typeof exports);
         if (exports != null) {
+
+            console.log("exports from file-loader=====>",typeof exports);
             return exports;
         }
     }
+
+    return exports;
 
 }
 

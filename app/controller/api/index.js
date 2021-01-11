@@ -1,7 +1,7 @@
 module.exports = {
-    ok : "ok",
-
-    sayWell (){
-        console.log("well");
+    async sayWell (ctx, next){
+        console.log("well, I am saying hi now",ctx);
+        await next();
+        console.log("well, I am saying hi like final");
     }
 }

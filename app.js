@@ -12,12 +12,6 @@ const jwt = require("jsonwebtoken");
 const TOKENSECRET = require("./config/tokensecret");
 
 
-
-
-
-
-
-
 /*---登录状态检测中间件---*/
 nut.use( async (ctx, next) =>{
   if(ctx.url.match(/^\/community/) || ctx.url.match(/^\/personal/) || ctx.url.match(/^\/users/) || ctx.url.match(/^\/editor/) || ctx.url.match(/^\/offline/)){
@@ -54,13 +48,13 @@ nut.use( async (ctx, next) =>{
 
 
 // nut.use(require('koa-static')(__dirname + '/database/expose'));
-nut.use(require('koa-static')(__dirname + '/views'));
+nut.use(require('koa-static')(__dirname + '/app/plublic'));
 nut.use(require('koa-static')(__dirname + '/vue-public'));
 
 router(nut); //koa-router 应在koa-static下面注册，否则koa-router会根据静态路径多次match,影响性能
 
 //添加ejs模板并修改模板后缀为html
-// nut.use(views(__dirname + '/vue-dist', {
+// nut.use(views(__dirname + '/vue-public', {
 //   map : {html:'ejs'}
 // }));
 

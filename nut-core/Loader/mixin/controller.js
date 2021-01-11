@@ -11,12 +11,16 @@ module.exports = {
             directory : Path.join(this.options.baseDir, 'app/controller'),
             initializer : (obj, options) => {
 
-                console.log("path from controller ====>",utils.isClass(obj));
+                //如果controller是 class extends 写法;
                 if(utils.isClass(obj)){
-                    console.log('did we actually in already ????');
                     obj.prototype.pathName = options.pathName;
                     obj.prototype.fullPath = options.path;
                     return wrapClass(obj);
+                }
+
+                //如果controller是 module.exports = {...}写法;
+                if(utils.isObject(obj)){
+                    return wrapObject(obj);
                 }
 
             }
@@ -65,6 +69,38 @@ function wrapClass(Controller) {
 }
 
 
+function wrapObject(Controller, path, prefix){
+    const keys = Object.keys(Controller);
+    const ret = {};
+
+    for(let key of keys){
+        if(utils.isFunction(Controller[key])){
+            const names = utils.getParamNames(key);
+
+            ret[key] = functionToMiddleware(Controller[key]);
+            ret[key][FULLPATH] = `${path}#${prefix || ''}${key}()`;
+        }else if(utils.isObject(Controller[key])){
+            ret[key] = wrapObject(Controller[key], path, `${prefix || ''}${key}.`);
+        }
+    }
+
+    return ret;
+
+    function functionToMiddleware(func) {
+
+        const objectControllerMiddleware = async (...args) =>{
+            return await callFn(func, args, this);
+        };
+
+        for(let key in func){
+            objectControllerMiddleware[key] = func[key];
+        }
+
+        return objectControllerMiddleware;
+    }
+}
+
+
 
 async function callFn(fn, args = [], ctx) {
     if(!utils.isFunction(fn)){
@@ -72,7 +108,7 @@ async function callFn(fn, args = [], ctx) {
     }
 
     if(!utils.isGeneratorFunction(fn)){
-        console.warn("fn is not a generatorFunction");
+        // console.warn("fn is not a generatorFunction");
     }
 
     return ctx ? fn.call(ctx, ...args) : fn(...args);

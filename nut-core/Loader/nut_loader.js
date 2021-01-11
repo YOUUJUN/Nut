@@ -10,19 +10,18 @@ class NutLoader {
         this.options = options;
 
         this.app = this.options.app;
-
     }
 
 
     loadToApp (directory, property, options){
-        const cursor = this.app[property] = {};
+        const cursor = this.app[property] = {};    //设置指针指向{controller, service}
         options = Object.assign({},{
             directory : directory,
             cursor : cursor,
             inject : this.app
         } , options);
 
-        new FileLoader(options).load();
+        new FileLoader(options).load();   //设置指针初始化完成
     }
 
     get FileLoader(){

@@ -1,7 +1,5 @@
 const NutCore = require('../../nut-core').NutCore;
 
-console.log("NutCore===>",NutCore);
-
 class Nut extends NutCore{
 
     constructor(options = {}){
@@ -12,11 +10,10 @@ class Nut extends NutCore{
     }
 
     init () {
+        console.log('\x1B[32m','loading controller now.............');
         this.loader.loadController();
     }
 }
-
-console.log("Nut",Nut);
 
 module.exports = Nut;
 

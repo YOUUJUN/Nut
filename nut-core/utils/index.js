@@ -39,7 +39,26 @@ module.exports = {
 
     },
 
+    //获取函数参数名，返回数组 function f(params){}  ===>  ['params']
+    getParamNames(func, cache) {
+        var type = typeof func;
+
+        cache = cache !== false;
+        if (cache && func.__cache_names) {
+            return func.__cache_names;
+        }
+        var str = func.toString();
+        var names = str.slice(str.indexOf('(') + 1, str.indexOf(')')).match(/([^\s,]+)/g) || [];
+        func.__cache_names = names;
+        return names;
+    },
+
+
     isClass : ifClass,
+
+    isObject(arg) {
+        return typeof arg === 'object' && arg !== null;
+    },
 
     isFunction(root){
         return (typeof root === 'function');

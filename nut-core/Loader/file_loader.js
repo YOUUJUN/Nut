@@ -19,8 +19,6 @@ class FileLoader {
     constructor (options){
 
         this.options = Object.assign({}, defaults, options);
-
-        // app[options.callName] = this.load();
     }
 
     load(){
@@ -47,6 +45,8 @@ class FileLoader {
             },cursor)
         }
 
+        console.log('cursor===>',cursor);
+
         return cursor;
     }
 
@@ -72,21 +72,13 @@ class FileLoader {
                 if (!fs.statSync(fullPath).isFile()) continue;
 
                 let properties = defaultCamelize(filePath,"camel");
-
                 const pathName = directory.split(/[/\\]/).slice(-1) + '.' + properties.join('.');
-
                 let exports = getExports(fullPath, this.options, pathName);
-
-                console.log('so what is the exports anyway',exports);
-
-                // let name = Path.basename(filePath,".js");
 
                 items.push({fullPath,properties,exports});
             }
 
         }
-
-        console.log("items====>",items);
 
         return items;
     }
@@ -99,25 +91,21 @@ module.exports.EXPORTS = EXPORTS;
 module.exports.FULLPATH = FULLPATH;
 
 function getExports(fullPath, {initializer, inject}, pathName) {
-    console.log('into the  getExports ---------------->');
     let exports = utils.loadFile(fullPath);
-    console.log('well-----------------------ok--0',fullPath, exports);
     if(initializer){
         exports = initializer(exports, {path : fullPath, pathName});
-        console.log('well-----------------------ok', typeof exports);
+        console.log(fullPath,"inject from isObject judge!=====>");
     }
 
     if (utils.isClass(exports) || utils.isGeneratorFunction(exports) || utils.isAsyncFunction(exports)) {   //这个判断永远不会执行...
-        console.log("---------------------------------well this is wild------------------------------------");
+        console.log(fullPath,"inject from isClass judge!=====>");
         return exports;
     }
 
     if(utils.isFunction(exports)){
+        console.log(fullPath,"inject from isFunction judge!=====>");
         exports = exports(inject);
-        console.log("exports---->",typeof exports);
         if (exports != null) {
-
-            console.log("exports from file-loader=====>",typeof exports);
             return exports;
         }
     }
@@ -129,7 +117,7 @@ function getExports(fullPath, {initializer, inject}, pathName) {
 
 
 
-function defaultCamelize(filepath, caseStyle) {
+function defaultCamelize(filepath, caseStyle) {   //驼峰化JS文件名 foo_bar.js > FooBar
     const properties = filepath.substring(0, filepath.lastIndexOf('.')).split('/');
     return properties.map(property => {
         if (!/^[a-z][a-z0-9_-]*$/i.test(property)) {

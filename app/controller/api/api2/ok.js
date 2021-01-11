@@ -1,3 +1,5 @@
 module.exports = {
-    hello : "hello"
+    async hello () {
+        console.log('ok')
+    }
 }

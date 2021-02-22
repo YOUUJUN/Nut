@@ -12,6 +12,9 @@ class Nut extends NutCore{
     init () {
         console.log('\x1B[32m','loading controller now.............');
         this.loader.loadController();
+
+        console.log('\x1B[32m','loading services now.............');
+        this.loader.loadService();
     }
 }
 

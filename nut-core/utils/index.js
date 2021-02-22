@@ -75,6 +75,18 @@ module.exports = {
         return obj
             && obj.constructor
             && 'AsyncFunction' === obj.constructor.name;
+    },
+
+    //判断是否为简单类型
+    isPrimitive(arg){
+        return arg === null ||
+            typeof arg === 'boolean' ||
+            typeof arg === 'number' ||
+            typeof arg === 'string' ||
+            typeof arg === 'symbol' ||
+            typeof arg === 'undefined';
     }
+
+
 
 };

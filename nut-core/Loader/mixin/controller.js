@@ -9,6 +9,8 @@ module.exports = {
 
         options = Object.assign({},{
             directory : Path.join(this.options.baseDir, 'app/controller'),
+
+            //在file_loader.js运行时调用，获取JS文件module.exports的暴露内容，根据输出格式使用不同初始化方法；
             initializer : (obj, options) => {
 
                 //如果controller是 class extends 写法;
@@ -53,6 +55,9 @@ function wrapClass(Controller) {
             ret[key][FULLPATH] = Controller.prototype.fullPath + '#' + Controller.name + '.' + key + '()';
         }
     }
+
+
+    console.log('ret from contorller.js=====>',ret);
 
     return ret;
 

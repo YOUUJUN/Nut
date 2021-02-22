@@ -1,12 +1,12 @@
 const Nut = require('./nut/').Application;
 const nut = new Nut();
-const views = require('koa-views');
+// const views = require('koa-views');
 const json = require('koa-json');
 const onerror = require('koa-onerror');
 const bodyparser = require('koa-bodyparser');
 const logger = require('koa-logger');
 const router = require('./app/middleware/router');
-const history = require('koa2-history-api-fallback');
+// const history = require('koa2-history-api-fallback');
 const session = require('koa-session');
 const jwt = require("jsonwebtoken");
 const TOKENSECRET = require("./config/tokensecret");

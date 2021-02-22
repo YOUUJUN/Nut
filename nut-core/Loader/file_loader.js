@@ -21,6 +21,12 @@ class FileLoader {
         this.options = Object.assign({}, defaults, options);
     }
 
+    /**
+     * attach items to target object. Mapping the directory to properties.
+     * `app/controller/group/repository.js` => `target.group.repository`
+     * @return {Object} target
+     *
+     */
     load(){
         let items = this.parse();
         let cursor = this.options.cursor;
@@ -45,13 +51,36 @@ class FileLoader {
             },cursor)
         }
 
-        console.log('cursor===>',cursor);
-
         return cursor;
     }
 
 
 
+    /**
+     * Parse files from given directories, then return an items list, each item contains properties and exports.
+     *
+     * For example, parse `app/controller/group/repository.js`
+     *
+     * ```
+     * module.exports = app => {
+     *   return class RepositoryController extends app.Controller {};
+     * }
+     * ```
+     *
+     * It returns a item
+     *
+     * ```
+     * {
+     *   properties: [ 'group', 'repository' ],
+     *   exports: app => { ... },
+     * }
+     * ```
+     *
+     * `Properties` is an array that contains the directory of a filepath.
+     *
+     *
+     * @return {Array} item
+     */
     parse (){
         let directories = this.options.directory;
 
@@ -73,6 +102,7 @@ class FileLoader {
 
                 let properties = defaultCamelize(filePath,"camel");
                 const pathName = directory.split(/[/\\]/).slice(-1) + '.' + properties.join('.');
+
                 let exports = getExports(fullPath, this.options, pathName);
 
                 items.push({fullPath,properties,exports});

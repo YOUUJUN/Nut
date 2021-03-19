@@ -27,6 +27,9 @@ class NutCore extends KoaApplication{
             app : this
         })
 
+
+        this.loader.loadController();
+        this.loader.loadService();
     }
 
 

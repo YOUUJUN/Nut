@@ -1,5 +1,5 @@
 const Path = require('path');
-const Controller = require(Path.join(process.cwd(), 'nut')).Controller;
+const Controller = require(Path.join(process.cwd(), 'nut-core')).Controller;
 
 const os = require('os');
 
@@ -7,14 +7,12 @@ class HomeController extends Controller{
 
     async index (ctx, next){
         console.log("this from home.js=====>",this);
-        console.log("Process ===>", process.cwd());
-        console.log("Process ===>", process.platform);
-        console.log("cpus ===>", os.cpus());
         let service = ctx.service;
+        console.log('service from home.js===>',service);
         next();
-        console.log("say halo from inex final", service.home);
 
-        ctx.body = service.home.sayHi();
+        ctx.body = await service.home.sayHi();
+
     }
 
     async index2 (){

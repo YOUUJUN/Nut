@@ -1,5 +1,7 @@
 const Path = require('path');
-const Service = require(Path.join(process.cwd(), 'nut')).Service;
+const Service = require(Path.join(process.cwd(), 'nut-core')).Service;
+
+const model = require('../model/home');
 
 // module.exports = {
 //     said : "well... just checkout the utils folder.. amigo"
@@ -7,8 +9,19 @@ const Service = require(Path.join(process.cwd(), 'nut')).Service;
 
 class HomeService extends Service{
 
-    sayHi(){
-        return 'hi from service';
+    async sayHi(){
+        console.log('this from service ===>',this);
+        // try {
+        //     await model.authenticate();
+        //     // console.log('Connection has been established successfully.');
+        // } catch (error) {
+        //     console.error('Unable to connect to the database:', error);
+        // }
+        return this.well();
+    }
+
+    well (){
+        return 'well'
     }
 
 }

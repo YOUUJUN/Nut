@@ -124,16 +124,16 @@ function getExports(fullPath, {initializer, inject}, pathName) {
     let exports = utils.loadFile(fullPath);
     if(initializer){
         exports = initializer(exports, {path : fullPath, pathName});
-        console.log(fullPath,"inject from isObject judge!=====>");
+        // console.log(fullPath,"inject from isObject judge!=====>");
     }
 
-    if (utils.isClass(exports) || utils.isGeneratorFunction(exports) || utils.isAsyncFunction(exports)) {   //这个判断永远不会执行...
-        console.log(fullPath,"inject from isClass judge!=====>");
+    if (utils.isClass(exports) || utils.isGeneratorFunction(exports) || utils.isAsyncFunction(exports)) {
+        // console.log(fullPath,"inject from isClass judge!=====>");
         return exports;
     }
 
     if(utils.isFunction(exports)){
-        console.log(fullPath,"inject from isFunction judge!=====>");
+        // console.log(fullPath,"inject from isFunction judge!=====>");
         exports = exports(inject);
         if (exports != null) {
             return exports;

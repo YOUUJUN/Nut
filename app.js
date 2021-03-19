@@ -1,4 +1,4 @@
-const Nut = require('./nut/').Application;
+const Nut = require('./nut-core/').NutCore;
 const nut = new Nut();
 // const views = require('koa-views');
 const json = require('koa-json');

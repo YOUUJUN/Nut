@@ -57,13 +57,10 @@ function wrapClass(Controller) {
     }
 
 
-    console.log('ret from contorller.js=====>',ret);
-
     return ret;
 
 
     function methodToMiddleware(Controller, key) {
-
         return function classControllerMiddleware(...args) {
             const controller = new Controller(this);
 

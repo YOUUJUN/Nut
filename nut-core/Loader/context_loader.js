@@ -22,7 +22,7 @@ class ClassLoader {
     setProperty(property, values){
         Object.defineProperty(this, property, {
             get(){
-                console.log('property from context_loader==========>',property);
+                //使用相同模块直接取缓存，无需重复加载;
                 let instance = this.__cache.get(property);
                 if(!instance){
                     instance = getInstance(values, this.__ctx);
@@ -43,6 +43,10 @@ class ContextLoader extends FileLoader{
 
         const cursor = options.cursor = {};
 
+        if (options.fieldClass) {
+            options.inject[options.fieldClass] = cursor;
+        }
+
         super(options);
 
         const app = this.options.inject;
@@ -50,7 +54,6 @@ class ContextLoader extends FileLoader{
 
         Object.defineProperty(app.context, property, {
             get(){
-                console.log('well, hello from contextLoader');
                 if(!this[CLASSLOADER]){
                     this[CLASSLOADER] = new Map();
                 }
@@ -76,11 +79,9 @@ module.exports = ContextLoader;
 
 
 function getInstance(values, ctx){
-    console.log('vlaues from getInstance ============>',values);
     //如果是目录下面的属性，则没有EXPORTS Symbol属性；
     const Class = values[EXPORTS] ? values : null;
     let instance = {};
-    console.log("Class====>",Class);
     //如果有EXPORTS属性，则为JS文件下暴露属性；
     if(Class){
         //如果是module.exports = Class写法，则:
@@ -92,11 +93,9 @@ function getInstance(values, ctx){
     }else if(utils.isPrimitive(values)){  //判断是否为简单类型参数，简单类型无法设置property; // like module.exports = 1;
         instance = values;
     }else{  //如果是null;则创建classLoader对象;
-        console.log('if iam in ===>');
         instance = new ClassLoader({ctx, properties: values});
     }
 
-    console.log("instance from getInstance======================>",instance);
     return instance;
 }
 

@@ -17,6 +17,16 @@ class Tools{
         }
     }
 
+    //better async func error capture;
+    async errorCaptured(asyncFunc){
+        try{
+            let res = await asyncFunc();
+            return [null,res];
+        }catch (e) {
+            return [e, null];
+        }
+    }
+
 }
 
 module.exports = Tools;

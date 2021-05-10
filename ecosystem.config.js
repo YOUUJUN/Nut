@@ -1,7 +1,7 @@
 module.exports = {
     apps : [
         {
-            name : "test",
+            name : "nut",
             script : "./bin/www",
             watch: true,
             error_file : "./logs/.pm2/err.log",

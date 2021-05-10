@@ -21,7 +21,12 @@ class HomeService extends Service{
     }
 
     well (){
-        return 'well'
+        console.log('this from service home.js===>',this);
+        return this.foo();
+    }
+
+    foo (){
+        return 'foo';
     }
 
 }

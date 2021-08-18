@@ -18,6 +18,18 @@ class Tools{
     }
 
     //better async func error capture;
+    /*
+    *
+    * async function func() {
+            let [err, res] = await errorCaptured(asyncFunc)
+            if (err) {
+                //... 错误捕获
+            }
+            //...
+        }
+    *
+    *
+    * */
     async errorCaptured(asyncFunc){
         try{
             let res = await asyncFunc();

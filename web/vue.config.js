@@ -5,51 +5,6 @@ const webpack = require("webpack");
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const productionGzipExtensions = ['js', 'css'];
 
-
-
-// const util = require('util');
-// const events = require('events');
-
-// module.exports = new events();
-
-// const buildPageConfig = async () => {
-//
-//     let pages = {};
-//     let pagesPath = path.join(__dirname,"/src/pages");
-//
-//     let files = await fsPromises.readdir(pagesPath);
-//
-//     for(let file of files){
-//         let filePath = path.join(pagesPath,file);
-//         let page = {};
-//         await fsPromises.stat(filePath).then(
-//             stats => {
-//                 if (stats.isDirectory()) {
-//                     let entry = path.posix.join("src/pages", file,file.concat('.js'));
-//                     page.entry = entry;
-//                     page.template = path.posix.join("src/pages", file,file.concat('.html'));
-//                     page.filename = file.concat('.html');
-//                     pages[file] = page;
-//                 }
-//             }
-//         )
-//
-//     }
-//
-//     await new Promise((resolve, reject) => {
-//         let obj = {
-//             publicPath : '/',
-//             outputDir : './../vue-dist',
-//             pages : pages
-//         };
-//         module.exports.emit('trigger',obj);
-//     });
-//
-// };
-
-
-// buildPageConfig();
-
 const buildPageSync = () => {
     let pages = {};
     let pagesPath = path.join(__dirname,"/src/pages");
@@ -143,11 +98,6 @@ module.exports = function(){
         productionSourceMap : true, //开启后出错的时候，除错工具将直接显示原始代码，而不是转换后的代码。关闭可以减少打包体积
         configureWebpack : {
             plugins : [
-
-                new webpack.ProvidePlugin({
-                    $ : "jquery",
-                    jquery : "jquery"
-                }),
 
                 new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 

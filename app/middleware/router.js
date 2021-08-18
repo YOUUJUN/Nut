@@ -15,7 +15,9 @@ module.exports = (app) => {
 
     router.get('/hello',controller.api.index.sayWell, controller.home.index2);
 
-    router.get('/ok',controller.home.index);
+    router.get('/ok',controller.home.index,controller.home.index2);
+
+    router.post('test', controller.home.test);
 
     // router.get('/home',controller.api.home2.hi);
 

@@ -20,18 +20,16 @@
     "koa-json": "^2.0.2",
     "koa-logger": "^3.2.0",
     "koa-multer": "^1.0.2",
+    "koa-ratelimit": "^5.0.0",
     "koa-router": "^7.4.0",
     "koa-session": "^5.13.1",
     "koa-static": "^5.0.0",
     "koa-views": "^6.2.0",
-    "koa2-history-api-fallback": "^0.1.0",
     "multiparty": "^4.2.1",
     "mysql": "^2.18.1",
     "mysql2": "^2.2.5",
     "sequelize": "^6.5.0",
     "uuid": "^7.0.2"
   },
-  "devDependencies": {
-    "koa-onerror": "^4.1.0"
-  }
+  "devDependencies": {}
 }

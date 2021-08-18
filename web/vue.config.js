@@ -1,7 +1,7 @@
 // const fsPromises = require("fs").promises;
 const fs = require("fs");
 const path = require("path");
-const webpack = require("webpack");
+// const webpack = require("webpack");
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const productionGzipExtensions = ['js', 'css'];
 
@@ -33,16 +33,13 @@ const buildPageSync = () => {
     return pages;
 };
 
-let cdnBaseHttp = 'https://cdn.bootcss.com';
+let cdnBaseHttp = 'https://cdn.jsdelivr.net/npm';
 
 let externalConfig = [
     {name : 'vue', scope: 'Vue', js: 'vue.min.js'},
     {name : 'vue-router', scope: 'VueRouter', js: 'vue-router.min.js'},
     {name : 'vuex', scope: 'Vuex', js: 'vuex.min.js'},
-    {name: 'axios', scope: 'axios', js: 'axios.min.js'},
-    {name: 'element-ui', scope: 'ELEMENT', js: 'start.js.js', css: 'theme-chalk/index.css'},
-    {name: 'jquery', scope: 'window.jQuery', js: 'jquery.js'},
-    {name: 'echarts', scope: 'echarts', js: 'echarts.min.js'},
+    {name : 'axios', scope: 'axios', js: 'axios.min.js'}
 ];
 
 let getModulesVersion = () => {
@@ -63,8 +60,9 @@ let getExternalModules = (config) =>{
     config.forEach((item) => {
         if(item.name in dependencieModules){
             let version = dependencieModules[item.name];
-            item.css = item.css && [cdnBaseHttp, item.name, version, item.css].join('/');
-            item.js = item.js && [cdnBaseHttp, item.name, version, item.js].join('/');
+
+            item.css = item.css && `${cdnBaseHttp}/${item.name}@${version}/${item.css}`;
+            item.js = item.js && `${cdnBaseHttp}/${item.name}@${version}`;
 
             externals[item.name] = item.scope;
         }else{
@@ -74,6 +72,7 @@ let getExternalModules = (config) =>{
 
     return externals;
 }
+
 
 let externalModules = getExternalModules(externalConfig);
 
@@ -99,7 +98,7 @@ module.exports = function(){
         configureWebpack : {
             plugins : [
 
-                new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+                // new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 
                 // 配置compression-webpack-plugin压缩
                 new CompressionWebpackPlugin({
@@ -130,11 +129,11 @@ module.exports = function(){
                     })
             }
 
-            // if(process.env.NODE_ENV === 'development'){
-            //     config
-            //         .plugin('webpack-bundle-analyzer')
-            //         .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
-            // }
+            if(process.env.NODE_ENV === 'development'){
+                config
+                    .plugin('webpack-bundle-analyzer')
+                    .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
+            }
         }
     }
 };

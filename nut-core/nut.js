@@ -1,3 +1,12 @@
+/**
+ * nut.js
+ *
+ * The Framework based on koa
+ *
+ * designed && written by YOUJUN
+ *
+ * */
+
 const fs = require('fs');
 const KoaApplication = require('koa');
 const ContextClass = require('./utils/context_class');

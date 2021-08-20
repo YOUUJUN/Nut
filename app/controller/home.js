@@ -1,9 +1,17 @@
 const Path = require('path');
 const Controller = require(Path.join(process.cwd(), 'nut-core')).Controller;
 
-const os = require('os');
-
 class HomeController extends Controller{
+
+    async indexPage(ctx, next){
+        let service = ctx.service;
+        console.log('somebody just visit home page!');
+
+        await next();
+
+        ctx.body = await service.home.readPages('test.html');
+    }
+
 
     async index (ctx, next){
         // console.log("this from home.js=====>",this);
@@ -24,13 +32,6 @@ class HomeController extends Controller{
         console.log('-----4');
     }
 
-
-    async test(ctx, next){
-        console.log('ctx', ctx);
-        await next();
-
-        ctx.body = 'test done';
-    }
 }
 
 module.exports = HomeController;

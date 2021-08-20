@@ -1,10 +1,23 @@
+/**
+ * Based on @vue/cli-service": "^4.5.13",
+ *  Which webpack version is "webpack": "^4.0.0"
+ *
+ *  根据package.json中的 dependencies 依赖自动生成CDN导入HTML模板
+ *  为Vue做的多页面配置，pages结构需为: Test目录下 => Test.html, Test.js, Test.vue;
+ *
+ *  Designed && written by YOUJUN
+ *  Contact me => QQ: 824000803  :)
+ */
+
+
 // const fsPromises = require("fs").promises;
 const fs = require("fs");
 const path = require("path");
+
 // const webpack = require("webpack");
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
-const productionGzipExtensions = ['js', 'css'];
 
+const productionGzipExtensions = ['js', 'css'];
 const buildPageSync = () => {
     let pages = {};
     let pagesPath = path.join(__dirname,"/src/pages");
@@ -33,7 +46,7 @@ const buildPageSync = () => {
     return pages;
 };
 
-let cdnBaseHttp = 'https://cdn.jsdelivr.net/npm';
+const cdnBaseHttp = 'https://cdn.jsdelivr.net/npm';
 
 let externalConfig = [
     {name : 'vue', scope: 'Vue', js: 'vue.min.js'},
@@ -80,6 +93,8 @@ console.log("externalConfig ===>",externalConfig);
 
 console.log("externalModules ====>",externalModules);
 
+let pageConstruction = buildPageSync();
+
 delete require.cache[module.id];
 
 module.exports = function(){
@@ -88,7 +103,7 @@ module.exports = function(){
         outputDir : './../vue-public',
         assetsDir : "static",
         filenameHashing : false,
-        pages : buildPageSync(),
+        pages : pageConstruction,
         devServer : {
             port : 8080,
             hot : true,
@@ -109,31 +124,35 @@ module.exports = function(){
                 })
             ],
 
-            externals : externalModules
+            externals : externalModules,
+
+            resolve : {
+                alias : {
+                    '@' : path.resolve(__dirname, 'src')
+                }
+            }
 
         },
 
         chainWebpack: config => {
-            // config
-            //     .plugin('webpack-bundle-analyzer')
-            //     .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin);
 
-            const entry = Object.keys(buildPageSync());
+            const entry = Object.keys(pageConstruction);
+            console.log('entry===>',entry);
             for (const iterator of entry) {
                 config
-                    .plugin(`html-${iterator}`)
-                    .tap(args => {
+                    .plugin(`html-${iterator}`)  //自定义插件名称用于移除
+                    .tap(args => {   //动态修改plugin传参
                         console.log("args",args);
                         args[0].cdnConfig = externalConfig;
                         return args
                     })
             }
 
-            if(process.env.NODE_ENV === 'development'){
-                config
-                    .plugin('webpack-bundle-analyzer')
-                    .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
-            }
+            // if(process.env.NODE_ENV === 'development'){
+            //     config
+            //         .plugin('webpack-bundle-analyzer')
+            //         .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
+            // }
         }
     }
 };

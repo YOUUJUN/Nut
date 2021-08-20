@@ -1,5 +1,7 @@
 # Nut.JS
-### Web全栈开发框架,后台Koa,前台基于VueCli脚手架
+### Web全栈开发框架
+### 后台Koa,参考Egg内核的后端框架
+### 前台Vue项目,基于VueCli配置的Vue多页面脚手架
 ## 项目目录：
       .
       |-- app  #后台代码目录 参考egg.js
@@ -95,8 +97,7 @@
       |-- nginx.conf  #Nginx服务器配置文件（Nginx反向代理 3000端口到80端口，开启gzip）
       |-- package-lock.json
       |-- package.json
-      |-- README.md
-      `-- ycsoft.sql
+      `-- README.md
       
 
 

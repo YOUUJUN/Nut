@@ -14,7 +14,7 @@
 const fs = require("fs");
 const path = require("path");
 
-// const webpack = require("webpack");
+const webpack = require("webpack");
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 
 const productionGzipExtensions = ['js', 'css'];
@@ -106,7 +106,7 @@ module.exports = function(){
         pages : pageConstruction,
         devServer : {
             port : 8080,
-            hot : true,
+            hotOnly : true,
             open: false //是否自动打开浏览器
         },
         productionSourceMap : true, //开启后出错的时候，除错工具将直接显示原始代码，而不是转换后的代码。关闭可以减少打包体积
@@ -128,7 +128,11 @@ module.exports = function(){
 
             resolve : {
                 alias : {
-                    '@' : path.resolve(__dirname, 'src')
+                    '@' : path.resolve(__dirname, 'src'),
+                    '@assets' : path.resolve(__dirname, 'src/assets'),
+                    '@components': path.resolve(__dirname, 'src/components'),
+                    '@views': path.resolve(__dirname, 'src/views'),
+                    '@store': path.resolve(__dirname, 'src/store'),
                 }
             }
 
@@ -148,12 +152,47 @@ module.exports = function(){
                     })
             }
 
-            if(process.env.NODE_ENV === 'development'){
-                config
+            config.when(
+                process.env.NODE_ENV === 'development',
+                config => config
                     .plugin('webpack-bundle-analyzer')
                     .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
+            );
+
+            config.module
+                .rule("images")
+                .use("image-webpack-loader")
+                .loader("image-webpack-loader")
+                .options({
+                    mozjpeg: { progressive: true, quality: 65 },
+                    optipng: { enabled: false },
+                    pngquant: { quality: [0.65, 0.9], speed: 4 },
+                    gifsicle: { interlaced: false },
+                    webp: { quality: 75 }
+                });
+
+            //优化moment 去掉国际化内容；
+            //我都不知道哪来的moment
+            config
+                .plugin('ignore')
+                .use(new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/));
+
+            // config.optimization.minimizer[0].options.terserOptions.compress.pure_funcs = ['console.log'];
+        },
+
+        css: {
+            loaderOptions: {
+                // 给 less-loader 传递 Less.js 相关选项
+                less: {
+                    // `globalVars` 定义全局对象，可加入全局变量
+                    globalVars: {
+                        // primary: '#333'
+                    }
+                }
             }
-        }
+        },
+
+
     }
 };
 

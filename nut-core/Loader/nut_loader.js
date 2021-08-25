@@ -1,6 +1,7 @@
 const fs = require('fs');
 const Path = require('path');
 
+const utils = require('../utils');
 const FileLoader = require('./file_loader');
 const ContextLoader = require('./context_loader');
 
@@ -11,6 +12,7 @@ class NutLoader {
         this.options = options;
 
         this.app = this.options.app;
+        this.baseDir = this.options.baseDir;
     }
 
 
@@ -41,12 +43,18 @@ class NutLoader {
         return FileLoader;
     }
 
+    requireFile(filepath) {
+        const ret = utils.loadFile(filepath);
+        return ret;
+    }
+
 }
 
 
 const loaders = [
     require('./mixin/controller'),
     require('./mixin/service'),
+    require('./mixin/extend'),
 ];
 
 for(let loader of loaders){

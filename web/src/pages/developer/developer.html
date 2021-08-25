@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+<!--  <link rel="icon" href="<%= BASE_URL %>favicon.ico">-->
+
+  <% htmlWebpackPlugin.options.cdnConfig.forEach(function(item){ if(item.css){ %>
+  <link href="<%= item.css %>" rel="stylesheet" />
+  <% }}) %>
+
+  <title>Developer</title>
+</head>
+<body>
+<noscript>
+  <strong>We're sorry but web doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+</noscript>
+<div id="app"></div>
+
+<% htmlWebpackPlugin.options.cdnConfig.forEach(function(item){ if(item.js && !htmlWebpackPlugin.options.onlyCss){ %>
+<script type="text/javascript" src="<%= item.js %>"></script>
+<% }}) %>
+
+<!-- built files will be auto injected -->
+</body>
+</html>

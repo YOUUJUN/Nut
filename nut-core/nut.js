@@ -12,6 +12,7 @@ const KoaApplication = require('koa');
 const ContextClass = require('./utils/context_class');
 
 const NUT_LOADER = Symbol.for('NUT_LOADER');
+const HELPER = Symbol('Application#Helper');
 
 class NutCore extends KoaApplication{
 
@@ -37,13 +38,28 @@ class NutCore extends KoaApplication{
         })
 
 
+        this.loader.loadHelperExtend();
         this.loader.loadController();
         this.loader.loadService();
+
     }
 
 
     get [NUT_LOADER](){
         return require('./Loader/nut_loader');
+    }
+
+    get Helper(){
+        if(!this[HELPER]){
+            /**
+             * Define developers to extend Helper as ${baseDir}/app/extend/helper.js ,
+             * then you can use all method on `ctx.helper` that is a instance of Helper.
+             */
+            class Helper extends this.ContextClass{}
+            this[HELPER] = Helper;
+        }
+
+        return this[HELPER];
     }
 }
 

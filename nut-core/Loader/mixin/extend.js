@@ -1,16 +1,32 @@
 const Path = require('path');
 
+const originalPrototypes = {
+    request: require('koa/lib/request'),
+    response: require('koa/lib/response'),
+    context: require('koa/lib/context'),
+    application: require('koa/lib/application'),
+};
+
+
 module.exports = {
 
+    loadContextExtend(){
+        this.loadExtend('context', this.app.context);
+    },
+
     loadHelperExtend(){
+        console.log('this,',this);
+        console.log('----->',this.app.Helper);
         if(this.app && this.app.Helper){
             this.loadExtend('helper', this.app.Helper.prototype);
         }
     },
 
     loadExtend(name, proto){
-        const filePath = Path.join(this.baseDir, 'app/extend/helper.js');
+        const filePath = this.getExtendFilePaths(name) + `.js`;
+        console.log('filePath', filePath);
         const ext = this.requireFile(filePath);
+        console.log('ext', ext);
         const properties = Object.getOwnPropertyNames(ext);
 
         const mergeRecord = new Map();
@@ -22,9 +38,15 @@ module.exports = {
             //Copy descriptor
             let descriptor = Object.getOwnPropertyDescriptor(ext, property);
             let originalDescriptor = Object.getOwnPropertyDescriptor(proto, property);
-            if(!originalDescriptor){
+            console.log('originalDescriptor', originalDescriptor);
 
-            }else{
+            if(!originalDescriptor){
+                const originalProto = originalPrototypes[name];
+                if (originalProto) {
+                    originalDescriptor = Object.getOwnPropertyDescriptor(originalProto, property);
+                }
+            }
+            if(originalDescriptor){
                 descriptor = Object.assign({}, descriptor);
                 if(!descriptor.set && originalDescriptor.set){
                     descriptor.set = originalDescriptor.set;
@@ -38,6 +60,11 @@ module.exports = {
             mergeRecord.set(property, filePath)
         }
 
-    }
+    },
+
+
+    getExtendFilePaths(name) {
+        return Path.join(this.baseDir, 'nut-core/extend', name);
+    },
 
 }

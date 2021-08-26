@@ -38,6 +38,7 @@ class NutCore extends KoaApplication{
         })
 
 
+        this.loader.loadContextExtend();
         this.loader.loadHelperExtend();
         this.loader.loadController();
         this.loader.loadService();

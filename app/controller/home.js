@@ -6,7 +6,8 @@ class HomeController extends Controller{
     async indexPage(ctx, next){
         let service = ctx.service;
         console.log('somebody just visit home page!');
-        console.log(ctx.helloLa);
+
+        ctx.helper.helloLa();
         await next();
 
         ctx.body = await service.home.readPages('test.html');

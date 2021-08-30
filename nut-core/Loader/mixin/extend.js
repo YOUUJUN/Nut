@@ -23,48 +23,63 @@ module.exports = {
     },
 
     loadExtend(name, proto){
-        const filePath = this.getExtendFilePaths(name) + `.js`;
-        console.log('filePath', filePath);
-        const ext = this.requireFile(filePath);
-        console.log('ext', ext);
-        const properties = Object.getOwnPropertyNames(ext);
+        const filePaths = this.getExtendFilePaths(name);
+        console.log('filePaths', filePaths);
+        for(let filePath of filePaths){
+            filePath += `.js`;
 
-        const mergeRecord = new Map();
-        for(let property of properties){
-            if(mergeRecord.has(property)){
-
+            filePath = this.resolveModule(filePath);
+            console.log('filepath===>+', filePath);
+            if (!filePath) {
+                continue;
             }
 
-            //Copy descriptor
-            let descriptor = Object.getOwnPropertyDescriptor(ext, property);
-            let originalDescriptor = Object.getOwnPropertyDescriptor(proto, property);
-            console.log('originalDescriptor', originalDescriptor);
+            console.log('filePath', filePath);
+            const ext = this.requireFile(filePath);
+            console.log('ext', ext);
+            const properties = Object.getOwnPropertyNames(ext);
 
-            if(!originalDescriptor){
-                const originalProto = originalPrototypes[name];
-                if (originalProto) {
-                    originalDescriptor = Object.getOwnPropertyDescriptor(originalProto, property);
-                }
-            }
-            if(originalDescriptor){
-                descriptor = Object.assign({}, descriptor);
-                if(!descriptor.set && originalDescriptor.set){
-                    descriptor.set = originalDescriptor.set;
-                }
-                if(!descriptor.get && originalDescriptor.get){
-                    descriptor.get = originalDescriptor.get;
-                }
-            }
+            const mergeRecord = new Map();
+            for(let property of properties){
+                if(mergeRecord.has(property)){
 
-            Object.defineProperty(proto, property, descriptor);
-            mergeRecord.set(property, filePath)
+                }
+
+                //Copy descriptor
+                let descriptor = Object.getOwnPropertyDescriptor(ext, property);
+                let originalDescriptor = Object.getOwnPropertyDescriptor(proto, property);
+                console.log('originalDescriptor', originalDescriptor);
+
+                if(!originalDescriptor){
+                    const originalProto = originalPrototypes[name];
+                    if (originalProto) {
+                        originalDescriptor = Object.getOwnPropertyDescriptor(originalProto, property);
+                    }
+                }
+                if(originalDescriptor){
+                    descriptor = Object.assign({}, descriptor);
+                    if(!descriptor.set && originalDescriptor.set){
+                        descriptor.set = originalDescriptor.set;
+                    }
+                    if(!descriptor.get && originalDescriptor.get){
+                        descriptor.get = originalDescriptor.get;
+                    }
+                }
+
+                Object.defineProperty(proto, property, descriptor);
+                mergeRecord.set(property, filePath)
+            }
         }
 
     },
 
 
     getExtendFilePaths(name) {
-        return Path.join(this.baseDir, 'nut-core/extend', name);
+        let paths = [];
+        let staticPath = Path.join(this.baseDir, 'nut-core/extend', name);
+        let customPath = Path.join(this.baseDir, 'app/extend', name);
+        paths.push(staticPath, customPath);
+        return paths;
     },
 
 }

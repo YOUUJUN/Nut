@@ -48,6 +48,17 @@ class NutLoader {
         return ret;
     }
 
+    resolveModule(filepath) {
+        let fullPath;
+        try {
+            fullPath = require.resolve(filepath);
+        } catch (e) {
+            return undefined;
+        }
+
+        return fullPath;
+    }
+
 }
 
 

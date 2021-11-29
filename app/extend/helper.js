@@ -1,6 +1,6 @@
 module.exports = {
     helloLa (){
-        console.log('hellala');
+        console.log('hellala from custom helper');
         return 'hello';
     }
 }

@@ -15,8 +15,6 @@ module.exports = {
     },
 
     loadHelperExtend(){
-        console.log('this,',this);
-        console.log('----->',this.app.Helper);
         if(this.app && this.app.Helper){
             this.loadExtend('helper', this.app.Helper.prototype);
         }
@@ -24,19 +22,15 @@ module.exports = {
 
     loadExtend(name, proto){
         const filePaths = this.getExtendFilePaths(name);
-        console.log('filePaths', filePaths);
         for(let filePath of filePaths){
             filePath += `.js`;
 
             filePath = this.resolveModule(filePath);
-            console.log('filepath===>+', filePath);
             if (!filePath) {
                 continue;
             }
 
-            console.log('filePath', filePath);
             const ext = this.requireFile(filePath);
-            console.log('ext', ext);
             const properties = Object.getOwnPropertyNames(ext);
 
             const mergeRecord = new Map();
@@ -48,7 +42,6 @@ module.exports = {
                 //Copy descriptor
                 let descriptor = Object.getOwnPropertyDescriptor(ext, property);
                 let originalDescriptor = Object.getOwnPropertyDescriptor(proto, property);
-                console.log('originalDescriptor', originalDescriptor);
 
                 if(!originalDescriptor){
                     const originalProto = originalPrototypes[name];

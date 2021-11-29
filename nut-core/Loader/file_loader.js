@@ -1,6 +1,7 @@
 const Path = require("path");
 const fs = require("fs");
 
+//globby 用来遍历目录，找到目录下所有的特定后缀文件(*.js),返回 (目录/文件.文件名的格式)
 const globby = require('globby/index');
 
 const utils = require('../utils');
@@ -57,6 +58,10 @@ class FileLoader {
 
 
     /**
+     *
+     * 解析给定的目录，返回一个包含目录下js模块路径，js模块包含的方法名，和模块的抛出指针
+     *
+     *
      * Parse files from given directories, then return an items list, each item contains properties and exports.
      *
      * For example, parse `app/controller/group/repository.js`
@@ -120,6 +125,8 @@ module.exports = FileLoader;
 module.exports.EXPORTS = EXPORTS;
 module.exports.FULLPATH = FULLPATH;
 
+
+//获取模块的暴露内容
 function getExports(fullPath, {initializer, inject}, pathName) {
     let exports = utils.loadFile(fullPath);
     if(initializer){
@@ -146,8 +153,8 @@ function getExports(fullPath, {initializer, inject}, pathName) {
 
 
 
-
-function defaultCamelize(filepath, caseStyle) {   //驼峰化JS文件名 foo_bar.js > FooBar
+//驼峰化JS文件名 foo_bar.js > FooBar
+function defaultCamelize(filepath, caseStyle) {
     const properties = filepath.substring(0, filepath.lastIndexOf('.')).split('/');
     return properties.map(property => {
         if (!/^[a-z][a-z0-9_-]*$/i.test(property)) {

@@ -3,7 +3,6 @@ module.exports = {
         {
             name : "nut",
             script : "./bin/www",
-            // script : "./app.js",
             watch: true,
             error_file : "./logs/.pm2/err.log",
             out_file : "./logs/.pm2/out.log",
@@ -12,7 +11,8 @@ module.exports = {
                 "NODE_ENV" : "development",
             },
             env_production : {
-                "NODE_ENV" : "production"
+                "NODE_ENV" : "production",
+                watch: false,
             }
         }
     ]

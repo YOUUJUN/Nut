@@ -65,6 +65,7 @@ class NutLoader {
 const loaders = [
     require('./mixin/controller'),
     require('./mixin/service'),
+    require('./mixin/model'),
     require('./mixin/extend'),
 ];
 

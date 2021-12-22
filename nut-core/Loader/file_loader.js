@@ -12,10 +12,23 @@ const EXPORTS = Symbol('NUT_LOADER_ITEM_EXPORTS');
 const defaults = {
     directory : null,
     cursor : null,
-    inject : null
+    inject : null,
+    caseStyle: 'camel',
+    initializer: null,
+    filter: null,
 };
 
 class FileLoader {
+
+
+    /**
+   * @class
+   * @param {Object} options - options
+   * @param {String|Array} options.directory - directories to be loaded
+   * @param {Function} options.initializer - custom file exports, receive two parameters, first is the inject object(if not js file, will be content buffer), second is an `options` object that contain `path`
+   * @param {Object} options.inject - an object that be the argument when invoke the function
+   * @param {Function} options.filter - a function that filter the exports which can be loaded
+   */
 
     constructor (options){
 
@@ -93,8 +106,9 @@ class FileLoader {
             directories = [directories];
         }
 
-        let items = [];
 
+        const filter = utils.isFunction(this.options.filter) ? this.options.filter : null;
+        let items = [];
 
         for(let directory of directories){
 
@@ -105,10 +119,13 @@ class FileLoader {
 
                 if (!fs.statSync(fullPath).isFile()) continue;
 
-                let properties = defaultCamelize(filePath,"camel");
+                let properties = defaultCamelize(filePath, this.options.caseStyle);
                 const pathName = directory.split(/[/\\]/).slice(-1) + '.' + properties.join('.');
 
                 let exports = getExports(fullPath, this.options, pathName);
+
+                // ignore exports when it's null or false returned by filter function
+                if (exports == null || (filter && filter(exports) === false)) continue;
 
                 items.push({fullPath,properties,exports});
             }

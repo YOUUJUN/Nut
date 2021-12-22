@@ -10,6 +10,11 @@ const originalPrototypes = {
 
 module.exports = {
 
+    loadApplicationExtend() {
+        console.log('loading application====================>');
+        this.loadExtend('application', this.app);
+    },
+
     loadContextExtend(){
         this.loadExtend('context', this.app.context);
     },
@@ -22,6 +27,7 @@ module.exports = {
 
     loadExtend(name, proto){
         const filePaths = this.getExtendFilePaths(name);
+        console.log('filePaths', filePaths);
         for(let filePath of filePaths){
             filePath += `.js`;
 
@@ -59,8 +65,10 @@ module.exports = {
                     }
                 }
 
+                console.log('property====>', property, "filePath==>", filePath);
                 Object.defineProperty(proto, property, descriptor);
                 mergeRecord.set(property, filePath)
+
             }
         }
 

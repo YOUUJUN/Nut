@@ -38,13 +38,15 @@ class NutCore extends KoaApplication{
         })
 
 
+        this.loader.loadApplicationExtend();
         this.loader.loadContextExtend();
         this.loader.loadHelperExtend();
         //加载控制层模块
         this.loader.loadController();
         //加载服务层模块
         this.loader.loadService();
-
+        //加载sequelize model
+        this.loader.loadModel();
     }
 
 

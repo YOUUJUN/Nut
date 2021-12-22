@@ -1,0 +1,7 @@
+const path = require('path');
+module.exports = {
+    'config': path.resolve('config', 'sequelize.json'), //数据库连接配置文件
+    'models-path': path.resolve('app', 'model'),     //模型文件
+    'seeders-path': path.resolve('db', 'seeders'),   //种子文件
+    'migrations-path': path.resolve('db', 'migrations') //迁移文件
+}

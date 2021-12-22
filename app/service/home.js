@@ -1,9 +1,6 @@
 const fsPromises = require("fs").promises;
 const Path = require('path');
 const Service = require(Path.join(process.cwd(), 'nut-core')).Service;
-
-const model = require('../model/home');
-
 class HomeService extends Service{
 
     async readPages (fileName){
@@ -15,12 +12,6 @@ class HomeService extends Service{
 
     async sayHi(){
         console.log('this from service ===>',this);
-        // try {
-        //     await model.authenticate();
-        //     // console.log('Connection has been established successfully.');
-        // } catch (error) {
-        //     console.error('Unable to connect to the database:', error);
-        // }
         return this.well();
     }
 

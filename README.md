@@ -12,14 +12,10 @@
       |   |   |   |-- hom2.js
       |   |   |   `-- index.js
       |   |   `-- home.js
-      |   |-- help
-      |   |   |-- common.js
-      |   |   |-- tools.js
-      |   |   `-- uploader.js
       |   |-- middleware  #路由层 控制路由
       |   |   `-- router.js
-      |   |-- model #数据层model
-      |   |   `-- home.js
+      |   |-- model #数据层model  //基于sequelize cli model
+      |   |   `-- 
       |   |-- plublic
       |   `-- service   #业务层 实现操作层controller的耦合封装
       |       |-- home.js
@@ -27,17 +23,25 @@
       |-- bin
       |   `-- www
       |-- config
-      |   |-- mysql_config.js
+      |   |-- sequelize.json  //sequelize cli 配置文件
       |   `-- tokensecret.js
-      |-- database
-      |   `-- mysql
-      |       `-- query.js
-      |-- logs
+      |-- db  //sequelize cli
+      |   |-- migrations
+      |   |-- seeders
+      |-- logs  //pm2 logs
       |-- nut-core  #参考Egg.js内核编写的后台框架
+      |   |-- extend
+      |   |   |-- context.js   //内置扩展context
+      |   |   |-- helper.js   //内置扩展helper
+      |   |-- Lib
+      |   |   `-- io.js   //内置扩展context
       |   |-- Loader
       |   |   |-- context_loader.js
       |   |   |-- file_loader.js
       |   |   |-- mixin
+      |   |   |   |-- extend.js
+      |   |   |   |-- model.js
+      |   |   |   |-- socket.js
       |   |   |   |-- controller.js
       |   |   |   `-- service.js
       |   |   `-- nut_loader.js

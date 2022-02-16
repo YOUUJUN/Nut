@@ -17,7 +17,6 @@
     "@vue/cli": "^4.5.13",
     "@vue/cli-service": "^4.5.13",
     "compression-webpack-plugin": "^3.1.0",
-    "image-webpack-loader": "^7.0.1",
     "less": "^3.0.0",
     "less-loader": "^5.0.0",
     "sass": "^1.3.0",

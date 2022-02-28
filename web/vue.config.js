@@ -52,7 +52,7 @@ let externalConfig = [
     {name : 'vue', scope: 'Vue', js: 'vue.min.js'},
     {name : 'vue-router', scope: 'VueRouter', js: 'vue-router.min.js'},
     {name : 'vuex', scope: 'Vuex', js: 'vuex.min.js'},
-    {name : 'axios', scope: 'axios', js: 'axios.min.js'}
+    {name : 'axios', scope: 'axios', js: 'axios.min.js', includes:[]}
 ];
 
 let getModulesVersion = () => {
@@ -143,11 +143,20 @@ module.exports = function(){
             const entry = Object.keys(pageConstruction);
             console.log('entry===>',entry);
             for (const iterator of entry) {
+
+                let cdnConfig = externalConfig.reduce((total, currentValue, index, arr) => {
+                    console.log('total', total);
+                    if(!currentValue.includes || currentValue.length === 0 || currentValue.includes.includes(iterator)){
+                        total.push(currentValue);
+                    }
+                    return total;
+                }, []);
+
                 config
                     .plugin(`html-${iterator}`)  //自定义插件名称用于移除
                     .tap(args => {   //动态修改plugin传参
                         console.log("args",args);
-                        args[0].cdnConfig = externalConfig;
+                        args[0].cdnConfig = cdnConfig;
                         return args
                     })
             }

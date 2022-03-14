@@ -52,7 +52,8 @@ let externalConfig = [
     {name : 'vue', scope: 'Vue', js: 'vue.min.js'},
     {name : 'vue-router', scope: 'VueRouter', js: 'vue-router.min.js'},
     {name : 'vuex', scope: 'Vuex', js: 'vuex.min.js'},
-    {name : 'axios', scope: 'axios', js: 'axios.min.js', includes:[]}
+    {name : 'axios', scope: 'axios', js: 'axios.min.js'},
+    // {name : 'axios', scope: 'axios', js: 'axios.min.js', includes:['test']}
 ];
 
 let getModulesVersion = () => {
@@ -102,7 +103,7 @@ module.exports = function(){
         publicPath : '/',
         outputDir : './../vue-public',
         assetsDir : "static",
-        filenameHashing : false,
+        filenameHashing : true,
         pages : pageConstruction,
         devServer : {
             port : 8080,
@@ -116,12 +117,12 @@ module.exports = function(){
                 // new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 
                 // 配置compression-webpack-plugin压缩
-                new CompressionWebpackPlugin({
-                    algorithm: 'gzip',
-                    test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
-                    threshold: 10240,
-                    minRatio: 0.8
-                })
+                // new CompressionWebpackPlugin({
+                //     algorithm: 'gzip',
+                //     test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
+                //     threshold: 10240,
+                //     minRatio: 0.8
+                // })
             ],
 
             externals : externalModules,
@@ -173,6 +174,33 @@ module.exports = function(){
             config
                 .plugin('ignore')
                 .use(new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/));
+
+
+            config  //打包时生成.gz文件
+                .plugin('compression-webpack-plugin')
+                .use(require('compression-webpack-plugin'), [{
+                    algorithm: 'gzip',
+                    test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
+                    threshold: 10240,
+                    minRatio: 0.8
+                }])
+                .tap(options => {
+                    console.log("options===>", options);
+                    return options;
+                })
+
+            config  //去除生产环境console;
+                .optimization
+                .minimize(true)
+                .minimizer('terser')
+                .tap(args => {
+                    let {terserOptions} = args[0];
+                    console.log('terserOptions', terserOptions);
+                    terserOptions.compress.drop_console = true;
+                    terserOptions.compress.drop_debugger = true;
+                    return args;
+                })
+
 
             // config.optimization.minimizer[0].options.terserOptions.compress.pure_funcs = ['console.log'];
         },

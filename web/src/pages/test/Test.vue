@@ -32,6 +32,7 @@
         },
 
         created () {
+            console.log('hello');
 
         },
 

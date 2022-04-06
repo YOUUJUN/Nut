@@ -31,6 +31,14 @@
 
         },
 
+        onLoad (){
+            this
+        },
+
+        beforeCreate() {
+            
+        },
+
         created () {
             console.log('hello');
 

@@ -56,6 +56,7 @@ let externalConfig = [
     // {name : 'axios', scope: 'axios', js: 'axios.min.js', includes:['test']}
 ];
 
+//不支持高版本node
 let getModulesVersion = () => {
     let mvs = {};
     let regexp = /^npm_package_.{0,3}dependencies_/gi;
@@ -68,9 +69,22 @@ let getModulesVersion = () => {
     return mvs;
 }
 
+//兼容高版本node
+let getDependenciesVersion = () => {
+    let mvs = {};
+    
+    let json = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
+    let dependencies = json.dependencies;
+    for(let key in dependencies){
+        mvs[key] = dependencies[key].replace(/(~|\^)/g, '');
+    }
+    
+    return mvs;
+}
+
 let getExternalModules = (config) =>{
     let externals = {};
-    let dependencieModules = getModulesVersion();
+    let dependencieModules = getDependenciesVersion();
     config.forEach((item) => {
         if(item.name in dependencieModules){
             let version = dependencieModules[item.name];
